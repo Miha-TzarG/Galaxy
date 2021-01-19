@@ -1,24 +1,55 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
     public float Speed = 6f;
    
     public Rigidbody2D rb;
-    public bool a;
-    // Start is called before the first frame update
+    public int HealthPlayer;
+    public int Score;
+    public Text textScore;
+    public GameObject[] Lives;
+
+    public GameObject panelGameOver;
+
+
+    public float leftBorder;
+    public float rightBorder;
+    public float topBorder;
+    public float bottomBorder;
+    public Vector3 pos;
+
+    public AudioSource audioSourceVzriv;
+    public AudioClip shootClipVzriv;
+
+
+
+
     void Start()
     {
+        float dist = Vector3.Distance(pos, Camera.main.transform.position);
+        leftBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).x;
+        rightBorder = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
+        topBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, dist)).y;
+        bottomBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
+
+        Time.timeScale = 1;
+        textScore.text = Score.ToString();
         rb = GetComponent<Rigidbody2D>();
 
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-     var mousePosition = Input.mousePosition;
+        pos = transform.position;
+        transform.position = new Vector3(Mathf.Clamp(pos.x, leftBorder, rightBorder), Mathf.Clamp(pos.y, bottomBorder, topBorder), pos.z);
+
+        var mousePosition = Input.mousePosition;
             //mousePosition.z = transform.position.z - Camera.main.transform.position.z; // это только для перспективной камеры необходимо
             mousePosition = Camera.main.ScreenToWorldPoint(mousePosition); //положение мыши из экранных в мировые координаты
             var angle = Vector2.Angle(Vector2.right, mousePosition - transform.position);//угол между вектором от объекта к мыше и осью х
@@ -45,5 +76,42 @@ public class PlayerScript : MonoBehaviour
            rb.AddForce(movement * Speed);
        
         
+    }
+
+    public void Damageplayer()
+    {
+       
+
+        if(HealthPlayer - 1 == -2)
+        {
+            Lives[0].SetActive(false);
+            Time.timeScale = 0;
+            panelGameOver.SetActive(true);
+        }
+        else
+        {
+            Lives[HealthPlayer].SetActive(false);
+            HealthPlayer = HealthPlayer - 1;
+           
+
+
+        }
+    }
+
+    public void UpdateScore()
+    {
+        Score = Score + 10;
+        textScore.text = Score.ToString();
+        Playvzriv();
+    }
+
+    public void RestartLVL()
+    {
+        SceneManager.LoadScene("Game");
+    }
+
+    public void Playvzriv()
+    {
+        audioSourceVzriv.PlayOneShot(shootClipVzriv);
     }
 }

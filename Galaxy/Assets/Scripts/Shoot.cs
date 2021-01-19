@@ -15,9 +15,13 @@ public class Shoot : MonoBehaviour
 
     public float TimeSpawn = 0.2f;
     private float nextTime = 0.0f;
-    // Start is called before the first frame update
+
+   public AudioSource audioSource;
+    public AudioClip shootClip;
+   
     void Start()
     {
+      
         pool_size = new GameObject[pool_count];
         for (int i = 0; i < pool_count; i++)
         {
@@ -25,16 +29,17 @@ public class Shoot : MonoBehaviour
             pool_size[i].SetActive(false);
             
         }
-        point.transform.localScale.Set(3f, 1f, 1f);
+     
     }
 
-    // Update is called once per frame
+   
     void Update()
     {
         if (Input.GetMouseButton(0) == true)
         {
             if (Time.time > nextTime)
             {
+                audioSource.PlayOneShot(shootClip);
                 nextTime = Time.time + TimeSpawn;
                 GameObject obj = pool_parent.GetChild(pool_element_ID).gameObject;
                 obj.SetActive(true);

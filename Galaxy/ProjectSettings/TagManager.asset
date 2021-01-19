@@ -9,6 +9,10 @@ TagManager:
   - NLO
   - Rock1
   - Rock2
+  - SpawnPoinRock
+  - SpawnPoinRock2
+  - SpawnNLO
+  - LefBorder
   layers:
   - Default
   - TransparentFX
