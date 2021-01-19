@@ -56,7 +56,7 @@ public class EnemyScript : MonoBehaviour
 
     public void CreateminiRock()
     {
-        KolvaminiRock = Random.Range(0, 4);
+        KolvaminiRock = Random.Range(0, 7);
         prefabMiniRock = new GameObject[KolvaminiRock];
         for (int i = 0; i < prefabMiniRock.Length; i++)
 
